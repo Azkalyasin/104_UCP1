@@ -7,7 +7,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.listen(PORT, () => {
-  console.log("server run in port");
+  console.log("server run in port 3001");
 });
 
 db.sequelize
@@ -20,3 +20,21 @@ db.sequelize
   .catch((err) => {
     console.log(err);
   });
+
+app.post("/hotel", async (req, res) => {
+  const data = req.body;
+  try {
+    const hotel = await db.hotel.create(data);
+    res.send(hotel);
+  } catch (error) {}
+  res.send({ message: error.message });
+});
+
+app.get("/hotel", async (req, res) => {
+  try {
+    const hotel = await db.hotel.findAll();
+    res.send(hotel);
+  } catch (error) {
+    res.send({ message: error.message });
+  }
+});
